@@ -57,7 +57,7 @@ Simple Invoice module which is approving or rejecting single invoice using infor
 
 * In .env.example proper connection to database is established.
 
-* Using proper DDD structure is preferred (with elements like entity, value object, repository, mapper / proxy, DTO) but not mandatory.
+* Using proper DDD structure is mandatory (with elements like entity, value object, repository, mapper / proxy, DTO).
 Unit tests in plus.
 
 * Docker is in docker catalog and you need only do 

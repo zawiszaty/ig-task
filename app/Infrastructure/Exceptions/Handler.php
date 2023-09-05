@@ -1,9 +1,15 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Infrastructure\Exceptions;
 
+use App\Modules\Invoices\Domain\CantChangeInvoiceStatus;
+use App\Modules\Invoices\Infrastructure\Database\InvoiceNotFound;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
-use Throwable;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 class Handler extends ExceptionHandler
 {
@@ -39,12 +45,20 @@ class Handler extends ExceptionHandler
     /**
      * Register the exception handling callbacks for the application.
      *
-     * @return void
      */
-    public function register()
+    public function register(): void
     {
-        $this->reportable(function (Throwable $e) {
-            //
+        $this->renderable(function (InvoiceNotFound $e, Request $request) {
+            return new JsonResponse([
+                'status' => 'fail',
+                'message' => $e->getMessage(),
+            ], Response::HTTP_NOT_FOUND);
+        });
+        $this->renderable(function (CantChangeInvoiceStatus $e, Request $request) {
+            return new JsonResponse([
+                'status' => 'fail',
+                'message' => $e->getMessage(),
+            ], Response::HTTP_BAD_REQUEST);
         });
     }
 }
